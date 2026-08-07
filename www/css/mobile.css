@@ -1,0 +1,150 @@
+/* ===== 移动端适配（手机 / 窄屏，≤768px）=====
+   目标：修复"部分内容在屏幕外"——桌面端 .app 是 220px+1fr 两列，
+   在手机上侧边栏占掉 220px 把内容挤成 ~150px 宽。这里改为单列布局，
+   侧边栏变顶部吸顶横向导航，内容占满整宽。 */
+
+@media (max-width: 768px) {
+  /* —— 最外层：单列，内容占满整宽 —— */
+  .app {
+    display: block;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  /* —— 左侧导航 → 顶部横向可滚动标签栏（吸顶） —— */
+  .sidebar {
+    flex-direction: row;
+    align-items: center;
+    gap: 0;
+    padding: 6px 8px;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: var(--color-bg-nav);
+    overflow: hidden;
+  }
+  .sidebar-head { display: none; }
+  .nav {
+    flex-direction: row;
+    flex: 1;
+    overflow-x: auto;
+    gap: 4px;
+    scrollbar-width: none; /* Firefox 隐藏滚动条 */
+  }
+  .nav::-webkit-scrollbar { display: none; } /* WebKit 隐藏滚动条 */
+  .nav-item {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 16px;
+  }
+  .nav-item .nav-ico { display: none; }
+  .sidebar-foot {
+    margin: 0 0 0 8px;
+    padding: 0 0 0 8px;
+    border-top: none;
+    border-left: 1px solid var(--color-border);
+  }
+
+  /* —— 内容区：整页滚动 —— */
+  .content { display: block; overflow: visible; }
+  .topbar {
+    padding: 12px 14px 8px;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    align-items: center;
+  }
+  .view-title { font-size: 18px; }
+  .refresh-time { font-size: 11px; }
+  .views { padding: 12px 14px 56px; }
+
+  /* 同步 / 环境徽标缩小 */
+  .sync-badge, .env-badge { font-size: 11px; padding: 3px 8px; }
+  .env-badge { order: -1; }
+
+  /* ===== 计划模块 ===== */
+  .plan-header { margin-bottom: 12px; gap: 10px; }
+  .plan-title { font-size: 18px; }
+  .plan-subtitle { font-size: 11px; }
+  .plan-stats { gap: 10px; }
+  .plan-stat { padding: 8px 12px; min-width: 70px; }
+  .plan-stat-num { font-size: 20px; }
+  .plan-week-range { font-size: 14px; gap: 6px; flex-wrap: wrap; }
+  #planRange { min-width: 110px; }
+
+  .plan-body {
+    grid-template-columns: 1fr !important;
+    gap: 12px;
+    min-height: 0;
+  }
+  .plan-tracks { padding: 12px; }
+  .plan-calendar-wrap { padding: 10px; }
+  .plan-day-detail { padding: 12px; max-height: none; min-height: 0; }
+  .plan-calendar { gap: 4px; }
+  .plan-cell { min-height: 56px; padding: 5px; }
+  .plan-cell-num { width: 18px; height: 18px; font-size: 11px; margin-bottom: 3px; }
+  .plan-cell-event { font-size: 10px; gap: 3px; }
+  .plan-cell-more { font-size: 9px; }
+  .track-list { gap: 6px; }
+  .track-list li { padding: 4px 10px; font-size: 12px; }
+
+  /* 当天添加区：控件全宽 */
+  .plan-day-add { gap: 8px; }
+  .plan-day-add input[type="text"],
+  .plan-day-add input[type="time"],
+  .plan-day-add select { width: 100%; min-width: 0; }
+  .time-input-wrap { width: 100%; }
+
+  /* 待安排池 */
+  .plan-unscheduled-add { flex-wrap: wrap; }
+  .plan-unscheduled-add input { flex: 1; min-width: 120px; }
+
+  /* ===== 通用录入行（备忘 / 灵感 / 学习 / 习惯） ===== */
+  .record-add, .memo-add, .learn-add, .habit-add, .plan-track-add {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .memo-add, .learn-add, .habit-add { flex-direction: column; align-items: stretch; }
+  .memo-add input,
+  .learn-add .learn-name,
+  .learn-add .learn-url,
+  .habit-add input { width: 100%; }
+  .plan-track-add input { width: 100%; }
+
+  /* ===== 网格类窄屏单列 ===== */
+  .habits-grid, .auto-grid, .memo-cats, .color-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* 资金表格横向滚动，避免溢出 */
+  #financeHolder { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  #financeHolder table { width: 100%; min-width: 460px; }
+
+  /* ===== 弹窗近全屏 ===== */
+  .modal-card {
+    width: 92vw;
+    max-width: 92vw;
+    max-height: 88vh;
+    overflow-y: auto;
+    margin: 6vh auto;
+    border-radius: 12px;
+  }
+  .modal-row { flex-direction: column; gap: 10px; }
+  .modal-field { flex-direction: column; align-items: stretch; }
+  .modal-field span { margin-bottom: 4px; }
+  .modal-field input, .modal-field select { width: 100%; }
+
+  /* 通用按钮不要被挤压 */
+  .btn { font-size: 14px; padding: 8px 14px; }
+
+  /* 提示文字缩小 */
+  .hint, .memo-hint, .plan-subtitle { font-size: 12px; }
+
+  /* 学习/灵感列表项操作按钮换行不被截断 */
+  .record-list li, .learn-list li, .memo-cats .memo-col li {
+    flex-wrap: wrap;
+  }
+}

@@ -1,5 +1,5 @@
-// 个人工作台 · NAS 同步后端
-// 零依赖 Node 服务：GET/POST /data.json，x-sync-token 鉴权 + CORS，数据落盘 /data/data.json
+// 个人工作台 · 一体化后端（API + 静态前端）
+// 零依赖 Node：GET/POST /data.json（x-sync-token 鉴权 + CORS）；/health；其余 serve 静态前端
 // 设计为「哑存储」：只保存工作台推送过来的整份文档（schema 与 Gist 一致），冲突合并交给前端做。
 const http = require('http');
 const fs = require('fs');
@@ -8,6 +8,7 @@ const path = require('path');
 const PORT = process.env.PORT || 3000;
 const TOKEN = (process.env.SYNC_TOKEN || '').trim();
 const DATA_FILE = process.env.DATA_FILE || '/data/data.json';
+const WWW = (process.env.WWW_DIR || '').trim();
 
 function allowOrigin(req) { return req.headers.origin || '*'; }
 
@@ -28,6 +29,42 @@ function checkToken(req) {
   const h = req.headers['x-sync-token'] ||
     new URL(req.url, 'http://x').searchParams.get('token') || '';
   return h === TOKEN;
+}
+
+const MIME = {
+  '.html': 'text/html; charset=utf-8',
+  '.js': 'text/javascript; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
+  '.json': 'application/json; charset=utf-8',
+  '.svg': 'image/svg+xml',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.ico': 'image/x-icon',
+  '.woff2': 'font/woff2',
+  '.woff': 'font/woff',
+  '.ttf': 'font/ttf',
+};
+
+function serveStatic(req, res) {
+  let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
+  if (p === '/') p = '/index.html';
+  const fp = path.normalize(path.join(WWW, p));
+  // 防目录穿越
+  if (!fp.startsWith(WWW)) { send(res, 403, { error: 'forbidden' }, req); return; }
+  fs.readFile(fp, (err, buf) => {
+    if (err) {
+      // SPA / 未知路径回退到 index.html
+      fs.readFile(path.join(WWW, 'index.html'), (e2, b2) => {
+        if (e2) { send(res, 404, { error: 'not found' }, req); return; }
+        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+        res.end(b2);
+      });
+      return;
+    }
+    const ext = path.extname(fp).toLowerCase();
+    res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });
+    res.end(buf);
+  });
 }
 
 function ensureDir() { try { fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true }); } catch {} }
@@ -65,9 +102,11 @@ const server = http.createServer((req, res) => {
     } else { send(res, 405, { error: 'method not allowed' }, req); }
   } else if (p === '/health') {
     send(res, 200, { ok: true }, req);
+  } else if (WWW) {
+    serveStatic(req, res);
   } else {
     send(res, 404, { error: 'not found' }, req);
   }
 });
 
-server.listen(PORT, () => console.log('workbench-sync listening on :' + PORT));
+server.listen(PORT, () => console.log('workbench-sync listening on :' + PORT + (WWW ? ' (serving frontend from ' + WWW + ')' : '')));

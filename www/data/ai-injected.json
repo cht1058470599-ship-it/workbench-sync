@@ -1,0 +1,140 @@
+{
+  "lastRefresh": "2026-08-05 16:38",
+  "todayTodos": [
+    {
+      "text": "示例：由 AI 每日早 8 点自动汇总今日要点",
+      "source": "auto"
+    }
+  ],
+  "assets": {
+    "source": "腾讯文档 · 资金",
+    "sourceUrl": "https://docs.qq.com/sheet/DTmpBRE9rSVhNaUtr?_fid=NjADOkIXMiKk",
+    "latestDate": "8月5日",
+    "previousDate": "8月3日",
+    "items": [
+      {
+        "name": "国债逆回购",
+        "type": "存储",
+        "amount": "¥100,583.00"
+      },
+      {
+        "name": "招商卡",
+        "type": "灵活备用金",
+        "amount": "¥93,029.00"
+      },
+      {
+        "name": "建行卡",
+        "type": "灵活备用金",
+        "amount": "¥15,478.00"
+      },
+      {
+        "name": "股票",
+        "type": "投资",
+        "amount": "¥56,902.00"
+      },
+      {
+        "name": "基金",
+        "type": "投资",
+        "amount": "¥5,963.00"
+      },
+      {
+        "name": "住房公积金",
+        "type": "存储",
+        "amount": "¥134,115.00"
+      },
+      {
+        "name": "宠物货款余额",
+        "type": "流动款",
+        "amount": "¥7,097.00"
+      },
+      {
+        "name": "宠物账户回款&待回款余额",
+        "type": "流动款",
+        "amount": "¥11,215.00"
+      },
+      {
+        "name": "饮用水货款余额",
+        "type": "流动款",
+        "amount": "¥41,253.00"
+      },
+      {
+        "name": "饮用水回款&待回款余额",
+        "type": "流动款",
+        "amount": "¥73,103.00"
+      }
+    ],
+    "summary": {
+      "total": "¥538,738.00",
+      "totalLiu": "¥241,175.00",
+      "totalKou": "¥104,623.00"
+    },
+    "diff": {
+      "total": {
+        "latest": 538738.0,
+        "previous": 536999.0,
+        "change": 1739.0,
+        "changeStr": "+¥1,739.00",
+        "percent": "+0.32%"
+      },
+      "totalKou": {
+        "latest": 104623.0,
+        "previous": 102884.0,
+        "change": 1739.0,
+        "changeStr": "+¥1,739.00",
+        "percent": "+1.69%"
+      }
+    },
+    "history": [
+      {
+        "date": "6月26日",
+        "total": "¥496,369.00",
+        "totalKou": "¥64,921.00"
+      },
+      {
+        "date": "7月2日",
+        "total": "¥497,175.00",
+        "totalKou": "¥63,660.00"
+      },
+      {
+        "date": "7月8日",
+        "total": "¥493,263.00",
+        "totalKou": "¥59,748.00"
+      },
+      {
+        "date": "7月15日",
+        "total": "¥513,537.00",
+        "totalKou": "¥80,022.00"
+      },
+      {
+        "date": "7月20日",
+        "total": "¥520,554.52",
+        "totalKou": "¥87,039.52"
+      },
+      {
+        "date": "7月24日",
+        "total": "¥522,357.00",
+        "totalKou": "¥88,842.00"
+      },
+      {
+        "date": "7月27日",
+        "total": "¥530,550.00",
+        "totalKou": "¥97,035.00"
+      },
+      {
+        "date": "7月30日",
+        "total": "¥534,501.00",
+        "totalKou": "¥100,386.00"
+      },
+      {
+        "date": "8月3日",
+        "total": "¥536,999.00",
+        "totalKou": "¥102,884.00"
+      },
+      {
+        "date": "8月5日",
+        "total": "¥538,738.00",
+        "totalKou": "¥104,623.00"
+      }
+    ]
+  }
+}

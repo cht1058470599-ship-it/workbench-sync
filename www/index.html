@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>个人工作台</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>%E2%96%A4</text></svg>" />
+  <link rel="stylesheet" href="css/theme.css?v=3557f72" />
+  <link rel="stylesheet" href="css/layout.css?v=3557f72" />
+  <link rel="stylesheet" href="css/modules.css?v=3557f72" />
+  <link rel="stylesheet" href="css/mobile.css?v=3557f72" />
+<script>window.__AI_DATA_SEED = {
+  "lastRefresh": "2026-08-05 16:38",
+  "todayTodos": [
+    {
+      "text": "示例：由 AI 每日早 8 点自动汇总今日要点",
+      "source": "auto"
+    }
+  ],
+  "assets": {
+    "source": "腾讯文档 · 资金",
+    "sourceUrl": "https://docs.qq.com/sheet/DTmpBRE9rSVhNaUtr?_fid=NjADOkIXMiKk",
+    "latestDate": "8月5日",
+    "previousDate": "8月3日",
+    "items": [
+      {
+        "name": "国债逆回购",
+        "type": "存储",
+        "amount": "¥100,583.00"
+      },
+      {
+        "name": "招商卡",
+        "type": "灵活备用金",
+        "amount": "¥93,029.00"
+      },
+      {
+        "name": "建行卡",
+        "type": "灵活备用金",
+        "amount": "¥15,478.00"
+      },
+      {
+        "name": "股票",
+        "type": "投资",
+        "amount": "¥56,902.00"
+      },
+      {
+        "name": "基金",
+        "type": "投资",
+        "amount": "¥5,963.00"
+      },
+      {
+        "name": "住房公积金",
+        "type": "存储",
+        "amount": "¥134,115.00"
+      },
+      {
+        "name": "宠物货款余额",
+        "type": "流动款",
+        "amount": "¥7,097.00"
+      },
+      {
+        "name": "宠物账户回款&待回款余额",
+        "type": "流动款",
+        "amount": "¥11,215.00"
+      },
+      {
+        "name": "饮用水货款余额",
+        "type": "流动款",
+        "amount": "¥41,253.00"
+      },
+      {
+        "name": "饮用水回款&待回款余额",
+        "type": "流动款",
+        "amount": "¥73,103.00"
+      }
+    ],
+    "summary": {
+      "total": "¥538,738.00",
+      "totalLiu": "¥241,175.00",
+      "totalKou": "¥104,623.00"
+    },
+    "diff": {
+      "total": {
+        "latest": 538738.0,
+        "previous": 536999.0,
+        "change": 1739.0,
+        "changeStr": "+¥1,739.00",
+        "percent": "+0.32%"
+      },
+      "totalKou": {
+        "latest": 104623.0,
+        "previous": 102884.0,
+        "change": 1739.0,
+        "changeStr": "+¥1,739.00",
+        "percent": "+1.69%"
+      }
+    },
+    "history": [
+      {
+        "date": "6月26日",
+        "total": "¥496,369.00",
+        "totalKou": "¥64,921.00"
+      },
+      {
+        "date": "7月2日",
+        "total": "¥497,175.00",
+        "totalKou": "¥63,660.00"
+      },
+      {
+        "date": "7月8日",
+        "total": "¥493,263.00",
+        "totalKou": "¥59,748.00"
+      },
+      {
+        "date": "7月15日",
+        "total": "¥513,537.00",
+        "totalKou": "¥80,022.00"
+      },
+      {
+        "date": "7月20日",
+        "total": "¥520,554.52",
+        "totalKou": "¥87,039.52"
+      },
+      {
+        "date": "7月24日",
+        "total": "¥522,357.00",
+        "totalKou": "¥88,842.00"
+      },
+      {
+        "date": "7月27日",
+        "total": "¥530,550.00",
+        "totalKou": "¥97,035.00"
+      },
+      {
+        "date": "7月30日",
+        "total": "¥534,501.00",
+        "totalKou": "¥100,386.00"
+      },
+      {
+        "date": "8月3日",
+        "total": "¥536,999.00",
+        "totalKou": "¥102,884.00"
+      },
+      {
+        "date": "8月5日",
+        "total": "¥538,738.00",
+        "totalKou": "¥104,623.00"
+      }
+    ]
+  }
+}
+;</script>
+</head>
+<body>
+  <div class="app">
+    <!-- 左侧固定导航 -->
+    <aside class="sidebar">
+      <div class="sidebar-head">
+        <span class="brand">个人工作台</span>
+      </div>
+      <nav class="nav" id="nav">
+        <a class="nav-item active" data-target="plan"><span class="nav-ico">▤</span>计划与安排</a>
+        <a class="nav-item" data-target="finance"><span class="nav-ico">¥</span>资金</a>
+        <a class="nav-item" data-target="notes"><span class="nav-ico">✎</span>备忘录</a>
+        <a class="nav-item" data-target="ideas"><span class="nav-ico">✦</span>灵感</a>
+        <a class="nav-item" data-target="learning"><span class="nav-ico">★</span>学习</a>
+        <a class="nav-item" data-target="habits"><span class="nav-ico">✓</span>习惯与健康</a>
+        <a class="nav-item" data-target="automations"><span class="nav-ico">⟳</span>自动化一览</a>
+        <a class="nav-item" data-target="settings"><span class="nav-ico">⚙</span>开发者配置</a>
+      </nav>
+      <div class="sidebar-foot">
+        <button class="btn-mini" id="themeToggle" title="切换亮/暗">◐</button>
+        <span class="theme-label" id="themeLabel">亮色</span>
+      </div>
+    </aside>
+
+    <!-- 右侧内容区 -->
+    <main class="content">
+      <header class="topbar">
+        <h1 class="view-title" id="viewTitle">计划与安排</h1>
+        <span class="refresh-time" id="lastRefresh">最近刷新：—</span>
+        <span class="env-badge" id="envBadge">本地</span>
+        <button class="sync-badge offline" id="syncBadge" type="button">同步中…</button>
+      </header>
+
+      <div class="views" id="views">
+
+        <!-- 计划与安排：四周日程窗 -->
+        <section class="view active" id="view-plan">
+          <div class="plan-header">
+            <div>
+              <h2 class="plan-title">PLAN CALENDAR</h2>
+              <p class="plan-subtitle">四周日程窗 · 单击选中某天 · 双击快速添加 · 事件可拖动改期 · 点标题/时间直接改</p>
+            </div>
+            <div class="plan-stats">
+              <div class="plan-stat"><span class="plan-stat-num" id="planNodeCount">0</span><span>日程节点</span></div>
+              <div class="plan-stat"><span class="plan-stat-num" id="planTaskCount">0</span><span>待办任务</span></div>
+            </div>
+          </div>
+
+          <div class="plan-week-range">
+            <button class="plan-nav-btn" id="planPrev" title="上四周">‹</button>
+            <span id="planRange">07-20 — 08-16</span>
+            <button class="plan-nav-btn" id="planNext" title="下四周">›</button>
+            <button class="plan-today-btn" id="planToday">Today</button>
+          </div>
+
+          <div class="plan-body">
+            <!-- 轨道列表 -->
+            <aside class="plan-tracks">
+              <h3>MY TRACKS</h3>
+              <ul class="track-list" id="trackList"></ul>
+              <div class="plan-track-add">
+                <input type="text" id="trackInput" placeholder="新建轨道" />
+                <button class="btn" id="trackAdd">+</button>
+              </div>
+              <div class="plan-legend">
+                <div><span class="dot type-block"></span>执行块</div>
+                <div><span class="dot type-fixed"></span>固定行程</div>
+                <div><span class="dot type-deadline"></span>截止日</div>
+                <div><span class="dot type-node"></span>项目节点</div>
+              </div>
+            </aside>
+
+            <!-- 日历 -->
+            <div class="plan-calendar-wrap">
+              <div class="plan-calendar-header">
+                <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span>
+              </div>
+              <div class="plan-calendar" id="planCalendar"></div>
+            </div>
+
+            <!-- 选中日期详情 -->
+            <aside class="plan-day-detail">
+              <div class="plan-day-head">
+                <h3>SELECTED DAY</h3>
+                <div class="plan-selected-date" id="selectedDate">—</div>
+              </div>
+              <div class="plan-day-add">
+                <div class="time-input-wrap">
+                  <input type="time" id="dayTimeInput" title="点击选择时间" />
+                  <button type="button" class="time-clear-btn" id="dayTimeClear" title="设为全天">×</button>
+                </div>
+                <input type="text" id="dayContentInput" placeholder="添加安排..." />
+                <select id="dayTypeInput">
+                  <option value="block">执行块</option>
+                  <option value="fixed">固定行程</option>
+                  <option value="deadline">截止日</option>
+                  <option value="node">项目节点</option>
+                </select>
+                <button class="btn" id="dayAdd">+</button>
+              </div>
+              <div class="plan-timeline" id="dayTimeline"></div>
+              <div class="plan-unscheduled">
+                <h4>DRAG TO SCHEDULE</h4>
+                <p class="hint">拖到日历任意一天即可安排，或点「填入」放到当前选中日</p>
+                <ul class="unscheduled-list" id="unscheduledList"></ul>
+                <div class="unscheduled-add">
+                  <input type="text" id="unschedInput" placeholder="添加待安排事项" />
+                  <button class="btn" id="unschedAdd">添加</button>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <!-- 资金 -->
+        <section class="view" id="view-finance">
+          <p class="hint">资产可直接编辑；改完点「同步到腾讯文档」即可推送，手机端刷新即可看到最新（数据走固定 Gist 源）。</p>
+          <div id="financeHolder">
+            <p class="empty-tip">暂无资产数据。提供腾讯文档表格链接后，AI 会读取并填充。</p>
+          </div>
+        </section>
+
+        <!-- 备忘录 -->
+        <section class="view" id="view-notes">
+          <div class="record-add memo-add">
+            <input type="text" id="noteInput" placeholder="记一笔备忘..." />
+            <select id="noteCat" class="memo-cat-select"></select>
+            <button class="btn" id="noteAdd">添加</button>
+          </div>
+          <div class="memo-hint">提示：勾选即标记完成并自动隐藏；拖动备忘项可在四个象限之间自由归类。</div>
+          <div class="memo-cats" id="memoCats"></div>
+          <div class="memo-done">
+            <button class="memo-done-toggle" id="memoDoneToggle">已完成 0 项 ▸</button>
+            <ul class="list memo-done-list" id="memoDoneList" hidden></ul>
+          </div>
+        </section>
+
+        <!-- 灵感 -->
+        <section class="view" id="view-ideas">
+          <div class="record-add">
+            <input type="text" id="ideaInput" placeholder="冒出的灵感..." />
+            <button class="btn" id="ideaAdd">添加</button>
+          </div>
+          <ul class="list record-list" id="ideaList"></ul>
+        </section>
+
+        <!-- 学习 -->
+        <section class="view" id="view-learning">
+          <div class="record-add learn-add">
+            <input type="text" id="learnName" class="learn-name" placeholder="名称，如《认知觉醒》" />
+            <input type="url" id="learnUrl" class="learn-url" placeholder="粘贴网址，如 https://www.bilibili.com/video/..." />
+            <button class="btn" id="learnAdd">添加</button>
+          </div>
+          <div class="learn-summary" id="learnSummary"></div>
+          <div class="learn-tabs" id="learnTabs">
+            <button class="learn-tab active" data-type="all">全部</button>
+            <button class="learn-tab" data-type="book">书籍</button>
+            <button class="learn-tab" data-type="video">视频</button>
+            <button class="learn-tab" data-type="audio">音频</button>
+            <button class="learn-tab" data-type="other">其它</button>
+          </div>
+          <ul class="list learn-list" id="learnList"></ul>
+
+          <!-- 学习项编辑弹窗 -->
+          <div class="modal" id="learnEditModal" hidden>
+            <div class="modal-backdrop"></div>
+            <div class="modal-card">
+              <div class="modal-head">
+                <h3>编辑学习项</h3>
+                <button class="modal-close" id="learnEditClose" title="关闭">×</button>
+              </div>
+              <div class="modal-body">
+                <input type="hidden" id="learnEditId" />
+                <label class="modal-field">
+                  <span>名称</span>
+                  <input type="text" id="learnEditTitle" placeholder="学习资源名称" />
+                </label>
+                <label class="modal-field">
+                  <span>网址</span>
+                  <input type="url" id="learnEditUrl" placeholder="https://..." />
+                </label>
+                <label class="modal-field">
+                  <span>类型</span>
+                  <select id="learnEditType">
+                    <option value="book">书籍</option>
+                    <option value="video">视频</option>
+                    <option value="audio">音频</option>
+                    <option value="other">其它</option>
+                  </select>
+                </label>
+                <div class="modal-row">
+                  <label class="modal-field">
+                    <span>总量</span>
+                    <input type="number" id="learnEditTotal" min="0" />
+                  </label>
+                  <label class="modal-field">
+                    <span>已完成</span>
+                    <input type="number" id="learnEditCurrent" min="0" />
+                  </label>
+                  <label class="modal-field">
+                    <span>每天进度</span>
+                    <input type="number" id="learnEditPace" min="0" />
+                  </label>
+                </div>
+              </div>
+              <div class="modal-foot">
+                <button class="btn ghost" id="learnEditCancel" type="button">取消</button>
+                <button class="btn" id="learnEditSave" type="button">保存</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 习惯与健康 -->
+        <section class="view" id="view-habits">
+          <div class="habits-grid" id="habitsGrid"></div>
+          <div class="habit-add">
+            <input type="text" id="habitInput" placeholder="新建习惯项，如：23点前睡 / 健身30分钟" />
+            <button class="btn" id="habitAdd">添加习惯</button>
+          </div>
+          <div class="reminder-box">
+            <h3>每日习惯提醒</h3>
+            <p class="hint">比亚迪 App 签到 — 每天 12:00</p>
+          </div>
+        </section>
+
+        <!-- 自动化一览 -->
+        <section class="view" id="view-automations">
+          <p class="hint">已在 WorkBuddy 运行的定时任务（数据来自自动化执行记录）。已接入执行日志的任务会显示最近一次运行结果与时间。</p>
+          <div class="auto-grid" id="autoGrid"></div>
+        </section>
+
+        <!-- 开发者配置 -->
+        <section class="view" id="view-settings">
+          <div class="settings-row">
+            <label>主题模式</label>
+            <div class="seg">
+              <button class="seg-btn" data-mode="light">亮色</button>
+              <button class="seg-btn active" data-mode="dark">暗色</button>
+            </div>
+          </div>
+          <div class="settings-row">
+            <label>配色微调</label>
+            <span class="hint">单独调整每个元素颜色，实时预览，保存到本地。</span>
+          </div>
+          <div class="color-grid" id="colorGrid"></div>
+
+          <div class="settings-sep"><span>跨设备同步</span></div>
+          <div class="settings-row">
+            <label>同步方式</label>
+            <div class="seg" id="syncModeSeg">
+              <button class="seg-btn" data-sync="gist">GitHub Gist</button>
+              <button class="seg-btn" data-sync="nas">绿联 NAS</button>
+            </div>
+          </div>
+          <div id="syncNasFields" hidden>
+            <div class="settings-row"><label>NAS 同步地址</label><input id="nasEndpoint" placeholder="https://app-8788-1058470599.cn55.ugdocker.link" /></div>
+            <div class="settings-row"><label>访问令牌</label><input id="nasToken" type="password" placeholder="与 NAS 后端 SYNC_TOKEN 一致" /></div>
+            <div class="settings-row"><button class="btn ghost" id="nasTest" type="button">测试连接</button></div>
+          </div>
+          <div class="settings-row">
+            <button class="btn primary" id="syncSave" type="button">保存同步设置</button>
+            <button class="btn ghost" id="syncMigrate" type="button">从 Gist 迁移到 NAS</button>
+          </div>
+          <div class="hint" id="syncCfgMsg"></div>
+
+          <div class="settings-actions">
+            <button class="btn" id="themeReset">重置默认</button>
+            <button class="btn primary" id="themeSave">保存配色</button>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="js/app.js?v=3557f72"></script>
+</body>
+</html>
