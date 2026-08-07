@@ -78,6 +78,86 @@ function writeData(str) {
   fs.renameSync(tmp, DATA_FILE); // 原子写，避免半截文件被读到
 }
 
+
+/* ===================== 腾讯文档代理（资产 ↔ 腾讯文档 双向实时） ===================== */
+const TDOC = {
+  base: 'https://docs.qq.com/openapi',
+  clientId: (process.env.TDOC_CLIENT_ID || '').trim(),
+  accessToken: (process.env.TDOC_ACCESS_TOKEN || '').trim(),
+  openId: (process.env.TDOC_OPEN_ID || '').trim(),
+  fileId: (process.env.TDOC_FILE_ID || '').trim(),
+  fileType: (process.env.TDOC_FILE_TYPE || 'doc').trim(), // doc | sheet
+  sheetId: (process.env.TDOC_SHEET_ID || '').trim(),       // sheet 子表 ID（可选）
+};
+function tdocHeaders() {
+  return {
+    'Access-Token': TDOC.accessToken,
+    'Client-Id': TDOC.clientId,
+    'Open-Id': TDOC.openId,
+    'Content-Type': 'application/json',
+  };
+}
+function tdocReady() {
+  return !!(TDOC.clientId && TDOC.accessToken && TDOC.openId && TDOC.fileId);
+}
+async function tdocGetJson(path, qs) {
+  const r = await fetch(TDOC.base + path + (qs ? '?' + qs : ''), { headers: tdocHeaders() });
+  const j = await r.json().catch(() => ({}));
+  if (j.ret !== 0) throw new Error('TDOC ' + (j.ret || r.status) + ': ' + (j.msg || r.statusText));
+  return j.data;
+}
+async function tdocSend(method, path, body) {
+  const r = await fetch(TDOC.base + path, {
+    method, headers: tdocHeaders(),
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  const j = await r.json().catch(() => ({}));
+  if (j.ret !== 0) throw new Error('TDOC ' + (j.ret || r.status) + ': ' + (j.msg || r.statusText));
+  return j.data;
+}
+// 读取资产（从腾讯文档）
+async function tdocReadAsset() {
+  if (TDOC.fileType === 'sheet') {
+    let sheetId = TDOC.sheetId;
+    if (!sheetId) {
+      const info = await tdocGetJson(`/spreadsheet/v2/files/${TDOC.fileId}/sheets`);
+      sheetId = (info && info.sheets && info.sheets[0] && info.sheets[0].sheetId) || '';
+      if (!sheetId) throw new Error('TDOC: 无法获取子表 ID');
+    }
+    const data = await tdocGetJson(`/spreadsheet/v2/files/${TDOC.fileId}/sheets/${sheetId}/values`, 'range=A1:B2');
+    const vals = (data && data.values) || [];
+    const text = (vals[0] && vals[0][0]) || '';
+    return JSON.parse(text);
+  } else {
+    const data = await tdocGetJson(`/document/v3/files/${TDOC.fileId}/export`, 'exportType=text');
+    return JSON.parse(String(data || ''));
+  }
+}
+// 写回资产（安全：不破坏用户原有文档内容）
+async function tdocWriteAsset(asset) {
+  const text = JSON.stringify(asset, null, 2);
+  if (TDOC.fileType === 'sheet') {
+    let sheetId = TDOC.sheetId;
+    if (!sheetId) {
+      const info = await tdocGetJson(`/spreadsheet/v2/files/${TDOC.fileId}/sheets`);
+      sheetId = (info && info.sheets && info.sheets[0] && info.sheets[0].sheetId) || '';
+      if (!sheetId) throw new Error('TDOC: 无法获取子表 ID');
+    }
+    await tdocSend('PUT', `/sheetbook/v2/${TDOC.fileId}/values/A1`, { values: [[text]] });
+    return { ok: true };
+  } else {
+    const MARK_START = '<!-- WORKBENCH_ASSETS_START -->';
+    const MARK_END = '<!-- WORKBENCH_ASSETS_END -->';
+    let current = '';
+    try { current = String(await tdocGetJson(`/document/v3/files/${TDOC.fileId}/export`, 'exportType=text') || ''); } catch {}
+    const block = MARK_START + '\n' + text + '\n' + MARK_END;
+    const re = new RegExp(MARK_START + '[\\s\\S]*?' + MARK_END);
+    const next = re.test(current) ? current.replace(re, block) : current + '\n\n' + block;
+    await tdocSend('PUT', `/document/v3/files/${TDOC.fileId}`, { content: next });
+    return { ok: true };
+  }
+}
+
 const server = http.createServer((req, res) => {
   if (req.method === 'OPTIONS') { send(res, 204, '', req); return; }
   const url = new URL(req.url, 'http://localhost');
@@ -104,6 +184,32 @@ const server = http.createServer((req, res) => {
     } else { send(res, 405, { error: 'method not allowed' }, req); }
   } else if (p === '/health') {
     send(res, 200, { ok: true }, req);
+
+  } else if (p === '/api/tdocs/asset') {
+    (async () => {
+      if (!tdocReady()) {
+        send(res, 200, { configured: false, error: '腾讯文档未配置（缺少 TDOC_CLIENT_ID / TDOC_ACCESS_TOKEN / TDOC_OPEN_ID / TDOC_FILE_ID 环境变量）' }, req);
+        return;
+      }
+      try {
+        if (req.method === 'GET') {
+          const asset = await tdocReadAsset();
+          send(res, 200, { configured: true, asset }, req);
+        } else if (req.method === 'POST') {
+          let body = '';
+          req.on('data', c => (body += c));
+          req.on('end', async () => {
+            try {
+              const parsed = JSON.parse(body);
+              await tdocWriteAsset(parsed.asset || parsed);
+              send(res, 200, { ok: true }, req);
+            } catch (e) { send(res, 400, { error: String(e.message || e) }, req); }
+          });
+        } else {
+          send(res, 405, { error: 'method not allowed' }, req);
+        }
+      } catch (e) { send(res, 502, { configured: true, error: String(e.message || e) }, req); }
+    })();
   } else if (WWW) {
     serveStatic(req, res);
   } else {
