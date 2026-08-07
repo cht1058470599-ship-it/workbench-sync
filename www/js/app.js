@@ -62,6 +62,14 @@ async function loadAiData() {
     }
   } catch (e) { console.warn('[工作台] 后端资产拉取失败，回退内联数据：', e); }
   // 2) 兜底：构建时内联种子
+  // 1.5) 尝试从腾讯文档读取（若已配置，作为资产权威来源，实现实时同步）
+  if (!data) {
+    try {
+      const tr = await fetch('/api/tdocs/asset', { cache: 'no-store' });
+      const tj = await tr.json();
+      if (tj && tj.configured && tj.asset) { data = tj.asset; console.info('[工作台] 资产数据来自腾讯文档'); }
+    } catch (e) { console.warn('[工作台] 腾讯文档资产读取失败，回退：', e); }
+  }
   if (!data && window.__AI_DATA_SEED && window.__AI_DATA_SEED.assets) data = window.__AI_DATA_SEED;
   // 3) 兜底：本地文件
   if (!data) {
@@ -679,10 +687,21 @@ function bindAssetInputs() {
     const full = { assets: currentAssets, todayTodos: seed.todayTodos || [], lastRefresh: new Date().toLocaleString('zh-CN') };
     try { localStorage.setItem('pw_ai_data', JSON.stringify(full)); } catch (e) {}
     try { localSet('ai_data', full); } catch (e) { console.warn('[资产] 推送云端失败：', e); }
+    pushToTdocs(currentAssets);
     const m = document.getElementById('assetMsg'); if (m) m.textContent = '已保存到云端（同步中）';
   };
   const sd = document.getElementById('assetSyncDoc');
-  if (sd) sd.onclick = function () { exportAssetsForSync(); };
+  if (sd) sd.onclick = async function () {
+    const m = document.getElementById('assetMsg'); if (m) m.textContent = '正在同步到腾讯文档…';
+    try {
+      const res = await fetch('/api/tdocs/asset', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ asset: currentAssets })
+      });
+      const j = await res.json().catch(() => ({}));
+      if (m) m.textContent = (res.ok && j.ok) ? '已同步到腾讯文档 ✓' : ('同步失败：' + (j.error || res.status));
+    } catch (e) { if (m) m.textContent = '同步失败：' + e.message; }
+  };
 }
 
 function computeDiff(hist) {
@@ -704,6 +723,19 @@ function fmtChange(n) {
 function pct(ch, base) {
   if (!base) return '0%';
   return (ch >= 0 ? '+' : '') + (ch / base * 100).toFixed(2) + '%';
+}
+
+
+/* 把资产写回腾讯文档（实时同步；未配置时后端返回 configured:false，静默忽略） */
+async function pushToTdocs(asset) {
+  try {
+    const res = await fetch('/api/tdocs/asset', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ asset: asset })
+    });
+    const j = await res.json().catch(() => ({}));
+    if (!res.ok || !j.ok) console.warn('[资产] 同步腾讯文档返回异常：', j.error || res.status);
+  } catch (e) { console.warn('[资产] 同步腾讯文档失败（已忽略）：', e); }
 }
 
 function exportAssetsForSync() {
