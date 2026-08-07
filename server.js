@@ -9,6 +9,7 @@ const PORT = process.env.PORT || 3000;
 const TOKEN = (process.env.SYNC_TOKEN || '').trim();
 const DATA_FILE = process.env.DATA_FILE || '/data/data.json';
 const WWW = (process.env.WWW_DIR || '').trim();
+const WWW_ABS = WWW ? path.resolve(WWW) : '';
 
 function allowOrigin(req) { return req.headers.origin || '*'; }
 
@@ -48,13 +49,14 @@ const MIME = {
 function serveStatic(req, res) {
   let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
   if (p === '/') p = '/index.html';
-  const fp = path.normalize(path.join(WWW, p));
-  // 防目录穿越
-  if (!fp.startsWith(WWW)) { send(res, 403, { error: 'forbidden' }, req); return; }
+  const rel = p.replace(/^\/+/, ''); // 去掉前导 /，避免被当成绝对路径
+  const fp = path.resolve(WWW_ABS, rel);
+  // 防目录穿越（统一用 resolve 后的绝对路径比较）
+  if (!fp.startsWith(WWW_ABS)) { send(res, 403, { error: 'forbidden' }, req); return; }
   fs.readFile(fp, (err, buf) => {
     if (err) {
       // SPA / 未知路径回退到 index.html
-      fs.readFile(path.join(WWW, 'index.html'), (e2, b2) => {
+      fs.readFile(path.resolve(WWW_ABS, 'index.html'), (e2, b2) => {
         if (e2) { send(res, 404, { error: 'not found' }, req); return; }
         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
         res.end(b2);
