@@ -3,13 +3,17 @@
    在手机上侧边栏占掉 220px 把内容挤成 ~150px 宽。这里改为单列布局，
    侧边栏变顶部吸顶横向导航，内容占满整宽。 */
 
-@media (max-width: 768px) {
+@media (max-width: 820px) {
   /* —— 最外层：单列，内容占满整宽 —— */
   .app {
     display: block;
     height: auto;
     min-height: 100vh;
   }
+  /* 根滚动修复：解除 theme.css 的 height:100% 锁定，允许整页纵向滚动，禁止横向溢出 */
+  html, body { height: auto; min-height: 100%; overflow-x: hidden; }
+  /* 移动端改为整页滚动，避免 .views 内部滚动容器在某些机型把底部内容截断 */
+  .views { overflow: visible !important; }
 
   /* —— 左侧导航 → 顶部横向可滚动标签栏（吸顶） —— */
   .sidebar {
@@ -82,8 +86,10 @@
   }
   .plan-tracks { padding: 12px; }
   .plan-calendar-wrap { padding: 10px; }
-  .plan-day-detail { padding: 12px; max-height: none; min-height: 0; }
+  .plan-day-detail { padding: 12px; max-height: none !important; min-height: 0; }
+  .plan-calendar, .plan-calendar-header { grid-template-columns: repeat(7, minmax(0, 1fr)); }
   .plan-calendar { gap: 4px; }
+  .plan-cell { aspect-ratio: auto; min-height: 50px; }
   .plan-cell { min-height: 56px; padding: 5px; }
   .plan-cell-num { width: 18px; height: 18px; font-size: 11px; margin-bottom: 3px; }
   .plan-cell-event { font-size: 10px; gap: 3px; }
