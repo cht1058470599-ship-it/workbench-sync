@@ -397,25 +397,6 @@
           </div>
           <div class="color-grid" id="colorGrid"></div>
 
-          <div class="settings-sep"><span>跨设备同步</span></div>
-          <div class="settings-row">
-            <label>同步方式</label>
-            <div class="seg" id="syncModeSeg">
-              <button class="seg-btn" data-sync="gist">GitHub Gist</button>
-              <button class="seg-btn" data-sync="nas">绿联 NAS</button>
-            </div>
-          </div>
-          <div id="syncNasFields" hidden>
-            <div class="settings-row"><label>NAS 同步地址</label><input id="nasEndpoint" placeholder="https://app-8788-1058470599.cn55.ugdocker.link" /></div>
-            <div class="settings-row"><label>访问令牌</label><input id="nasToken" type="password" placeholder="与 NAS 后端 SYNC_TOKEN 一致" /></div>
-            <div class="settings-row"><button class="btn ghost" id="nasTest" type="button">测试连接</button></div>
-          </div>
-          <div class="settings-row">
-            <button class="btn primary" id="syncSave" type="button">保存同步设置</button>
-            <button class="btn ghost" id="syncMigrate" type="button">从 Gist 迁移到 NAS</button>
-          </div>
-          <div class="hint" id="syncCfgMsg"></div>
-
           <div class="settings-actions">
             <button class="btn" id="themeReset">重置默认</button>
             <button class="btn primary" id="themeSave">保存配色</button>
