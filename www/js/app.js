@@ -1,7 +1,7 @@
 // 主入口：导航、模块逻辑、加载 AI 注入数据
 import { loadData, saveData, uid, todayStr } from './storage.js';
 import { initTheme } from './theme.js';
-import { initSync, subscribe, getStatus, pullNow, getSyncConfig, setSyncConfig, testNas, migrateToNas, localSet } from './sync.js';
+import { initSync, subscribe, getStatus, pullNow, localSet } from './sync.js';
 import config from './config.js';
 
 let currentAssets = null; // 资产编辑态（内存）
@@ -1595,53 +1595,7 @@ function renderSyncBadge() {
   window.__renderSyncBadge();
 }
 
-/* 同步设置（Gist / 绿联 NAS 切换、测试、迁移） */
-function initSyncSettings() {
-  const segBtns = document.querySelectorAll('#syncModeSeg .seg-btn');
-  const nasFields = document.getElementById('syncNasFields');
-  const endpointInp = document.getElementById('nasEndpoint');
-  const tokenInp = document.getElementById('nasToken');
-  const msg = document.getElementById('syncCfgMsg');
-  const cfg = getSyncConfig();
-  const isNas = cfg.mode === 'nas';
-  segBtns.forEach(b => b.classList.toggle('active', (b.dataset.sync === 'nas') === isNas));
-  nasFields.hidden = !isNas;
-  endpointInp.value = cfg.nas.endpoint || '';
-  tokenInp.value = cfg.nas.token || '';
 
-  segBtns.forEach(b => b.addEventListener('click', () => {
-    const nas = b.dataset.sync === 'nas';
-    segBtns.forEach(x => x.classList.toggle('active', x === b));
-    nasFields.hidden = !nas;
-  }));
-
-  const testBtn = document.getElementById('nasTest');
-  if (testBtn) testBtn.addEventListener('click', async () => {
-    const r = await testNas(endpointInp.value.trim(), tokenInp.value.trim());
-    msg.textContent = r.ok ? '✓ 连接成功（状态码 ' + r.status + '）' : '✗ 连接失败：' + (r.message || ('HTTP ' + r.status));
-  });
-
-  document.getElementById('syncSave').addEventListener('click', () => {
-    const nas = !nasFields.hidden;
-    const newCfg = {
-      mode: nas ? 'nas' : 'gist',
-      gist: { id: cfg.gist.id, token: cfg.gist.token, owner: cfg.gist.owner },
-      nas: { endpoint: endpointInp.value.trim(), token: tokenInp.value.trim() }
-    };
-    if (nas && !newCfg.nas.endpoint) { msg.textContent = '请填写 NAS 同步地址'; return; }
-    setSyncConfig(newCfg); // 写入 localStorage 并重载以重新初始化
-  });
-
-  document.getElementById('syncMigrate').addEventListener('click', async () => {
-    msg.textContent = '正在从 Gist 迁移到 NAS…';
-    try {
-      await migrateToNas();
-      msg.textContent = '✓ 迁移完成：Gist 数据已写入 NAS';
-    } catch (e) {
-      msg.textContent = '✗ 迁移失败：' + (e.message || e);
-    }
-  });
-}
 
 /* ---------- 启动 ----------
    必须放在文件末尾：上面用到的 planState / TYPE_META / PLAN_STORE 是 let/const，
@@ -1680,7 +1634,6 @@ function bootstrap() {
     ['备忘录', initMemo],
     ['习惯', initHabits],
     ['自动化', initAutomations],
-    ['同步设置', initSyncSettings],
   ];
   for (const [name, fn] of steps) {
     if (safe(name, fn)) failed.push(name);
